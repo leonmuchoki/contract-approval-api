@@ -1,7 +1,7 @@
 ## setup (WINDOWS)
-pip install pipenv
-pipenv install 
-pipenv shell
+*pip install pipenv
+*pipenv install 
+*pipenv shell
 
 SET FLASK_ENV=development
 SET DB_PASSWORD=YOUR_DB_PASSWORD
@@ -9,8 +9,8 @@ SET DB_NAME=YOUR_DB_NAME
 SET JWT_SECRET_KEY='SIRI-KALI'
 
 ## generate random key to use as jwt_secret_key
->>> import os
->>> os.urandom(24)
+> import os
+> os.urandom(24)
 
 ## db
  $ flask db migrate -m "Initial migration."
