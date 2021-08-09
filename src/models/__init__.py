@@ -5,5 +5,10 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-from .BlogpostModel import BlogpostModel, BlogpostSchema
 from .UserModel import UserModel, UserSchema
+from .ContractClauseModel import ContractClauseModel, ContractClauseSchema
+from .ContractDetailModel import ContractDetailModel, ContractDetailSchema
+from .ContractTypeModel import ContractTypeModel, ContractTypeSchema
+from .ProductModel import ProductModel, ProductModelSchema
+from .RoleModel import RoleModel, RoleSchema
+from .TenderModel import TenderModel, TenderModelSchema

@@ -1,7 +1,6 @@
 from marshmallow import fields, Schema
 import datetime
 from . import db, bcrypt
-from .BlogpostModel import BlogpostSchema
 
 
 class UserModel(db.Model):
@@ -18,7 +17,7 @@ class UserModel(db.Model):
 	password = db.Column(db.String(128), nullable=False)
 	created_at = db.Column(db.DateTime)
 	modified_at = db.Column(db.DateTime)
-	blogposts = db.relationship('BlogpostModel', backref='users', lazy=True)
+	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
 
 	# class constructor
 	def __init__(self, data):
@@ -30,6 +29,7 @@ class UserModel(db.Model):
 		self.password = self.__generate_hash(data.get('password'))
 		self.created_at = datetime.datetime.utcnow()
 		self.modified_at = datetime.datetime.utcnow()
+		self.role_id = data.get('role_id')
 
 	def save(self):
 		db.session.add(self)
@@ -76,4 +76,4 @@ class UserSchema(Schema):
 	password = fields.Str(required=True, load_only=True)
 	created_at = fields.DateTime(dump_only=True)
 	modified_at = fields.DateTime(dump_only=True)
-	blogposts = fields.Nested(BlogpostSchema, many=True)
+	role_id = fields.Int(dump_only=True)

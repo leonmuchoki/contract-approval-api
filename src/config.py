@@ -11,8 +11,8 @@ class Development(object):
     DEBUG = True
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    JWT_SECRET_KEY = "topsecret"
-    SQLALCHEMY_DATABASE_URI = "postgres://baseuser:base.Pass@localhost:5432/basedb"
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:" + os.getenv('DB_PASSWORD') + "@localhost/" + os.getenv('DB_NAME')
 
 
 class Production(object):

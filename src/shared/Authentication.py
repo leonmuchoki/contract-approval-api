@@ -25,12 +25,12 @@ class Auth():
 			return jwt.encode(
 				payload,
 				os.getenv('JWT_SECRET_KEY'),
-				'HS256'
-			).decode("utf-8")
+				algorithm='HS256'
+			)#.decode("utf-8")
 		except Exception as e:
 			return Response(
 				mimetype="application/json",
-				response=json.dumps({'error': 'error in generating user token'}),
+				response=json.dumps({'error': e}),
 				status=400
 			)
 
@@ -41,7 +41,13 @@ class Auth():
 		"""
 		re = {'data': {}, 'error': {}}
 		try:
-			payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'))
+			# print('payload')
+			# print(token)
+			# print('JWT_SECRET_KEY')
+			# print(os.getenv('JWT_SECRET_KEY'))
+			payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'), algorithms=["HS256"])
+			#print('payload')
+			#print(payload)
 			re['data'] = {'user_id': payload['sub']}
 			return re
 		except jwt.ExpiredSignatureError as e1:
@@ -60,13 +66,23 @@ class Auth():
 
 		@wraps(func)
 		def decorated_auth(*args, **kwargs):
-			if 'api-token' not in request.headers:
+			#if 'auth_token' not in request.headers:
+			if 'Authorization' not in request.headers:
 				return Response(
 					mimetype="application/json",
 					response=json.dumps({'error': 'Authentication token is not available, please login to get one'}),
 					status=400
 				)
 			token = request.headers.get('api-token')
+			auth_header = request.headers.get('Authorization')
+			if auth_header:
+				token = auth_header.split(" ")[1]
+			else:
+				token = ''
+
+			# print('token')
+			# print(token)
+
 			data = Auth.decode_token(token)
 			if data['error']:
 				return Response(
