@@ -1,26 +1,27 @@
 from . import db
 import datetime
 from marshmallow import fields, Schema
-from .ProductModel import ProductModelSchema
+from .ClauseSubDetailsModel import ClauseSubDetailsSchema
 
-class ContractProductModel(db.Model):
-    __tablename__ = 'contract_products'
+class ClauseDetailsModel(db.Model):
+    __tablename__ = 'clause_details'
 
     id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    contract_id = db.Column(db.Integer, db.ForeignKey('contracts.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
-    product_quantity = db.Column(db.Integer)
+    clause_id = db.Column(db.Integer, db.ForeignKey('clauses.id'), nullable=False)
+    clause_part_id = db.Column(db.Integer, db.ForeignKey('clause_parts.id'), nullable=False)
+    clause_detail = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     modified_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     modified_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    products = db.relationship('ProductModel', backref='contract_products', lazy=True)
+
+    clause_sub_details = db.relationship('ClauseSubDetailsModel', backref='clause_details', lazy=True)
 
     def __init__(self,data):
         self.id = data.get('id')
-        self.contract_id = data.get('contract_id')
-        self.product_id = data.get('product_id')
-        self.product_quantity = data.get('product_quantity')
+        self.clause_id = data.get('clause_id')
+        self.clause_part_id = data.get('clause_part_id')
+        self.clause_detail = data.get('clause_detail')
         self.created_at = data.get('created_at')
         self.created_by = data.get('created_by')
         self.modified_at = data.get('modified_at')
@@ -41,26 +42,26 @@ class ContractProductModel(db.Model):
         db.session.commit()
 
     @staticmethod
-    def get_all_contract_products():
-        return ContractProductModel.query.all()
+    def get_all_clause_details():
+        return ClauseDetailsModel.query.all()
 
     @staticmethod
-    def get_one_contract_product(id):
-        return ContractProductModel.query.get(id)
+    def get_one_clause_detail(id):
+        return ClauseDetailsModel.query.get(id)
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
-class ContractProductSchema(Schema):
+class ClauseDetailsSchema(Schema):
     """
-    Contract Product Schema
+    Clause Details Schema
     """
     id = fields.Int(dump_only=True)
-    contract_id = fields.Int(required=True)
-    product_id = fields.Int(required=True)
-    product_quantity = fields.Int(required=True)
+    clause_id = fields.Int(required=True)
+    clause_part_id = fields.Int(required=True)
+    clause_detail = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     created_by = fields.Int(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
     modified_by  =  fields.Int(dump_only=True)
-    products = fields.Nested(ProductModelSchema)
+    clause_sub_details = fields.Nested(ClauseSubDetailsSchema, many=True)

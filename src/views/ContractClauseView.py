@@ -14,12 +14,10 @@ def create():
 	"""
 	req_data = request.get_json()
 	req_data['created_by'] = g.user.get('id')
-	data, error = contract_clause_schema.load(req_data)
-	if error:
-		return custom_response(error, 400)
-	post = ContractClauseModel(data)
-	post.save()
-	data = contract_clause_schema.dump(post).data
+
+	contract_clause = ContractClauseModel(req_data)
+	contract_clause.save()
+	data = contract_clause_schema.dump(req_data)
 	return custom_response(data, 201)
 
 
@@ -28,8 +26,8 @@ def get_all():
 	"""
 	Get All Contract Clauses
 	"""
-	posts = ContractClauseModel.get_all_contract_clauses()
-	data = contract_clause_schema.dump(posts, many=True).data
+	contract_clauses = ContractClauseModel.get_all_contract_clauses()
+	data = contract_clause_schema.dump(contract_clauses, many=True)
 	return custom_response(data, 200)
 
 

@@ -3,6 +3,7 @@ import datetime
 from marshmallow import fields, Schema, INCLUDE
 from .ContractProductModel import ContractProductSchema
 from .ContractEntityModel import ContractEntitySchema
+from .ContractTypeModel import ContractTypeSchema
 
 class ContractModel(db.Model):
     __tablename__ = 'contracts'
@@ -16,8 +17,10 @@ class ContractModel(db.Model):
     modified_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     contract_entity_purchaser_id = db.Column(db.Integer, db.ForeignKey('contract_entities.id'), nullable=False)
     contract_entity_supplier_id = db.Column(db.Integer, db.ForeignKey('contract_entities.id'), nullable=False)
-    contract_products = db.relationship('ContractProductModel', backref='contracts', lazy=True)
+    contract_type_id =  db.Column(db.Integer, db.ForeignKey('contract_types.id'))
 
+    contract_products = db.relationship('ContractProductModel', backref='contracts', lazy=True)
+    contract_type = db.relationship('ContractTypeModel', backref='contracts', lazy=True)
     contract_entity_purchaser = db.relationship("ContractEntityModel", foreign_keys=[contract_entity_purchaser_id])
     contract_entity_supplier = db.relationship("ContractEntityModel", foreign_keys=[contract_entity_supplier_id])
 
@@ -31,6 +34,7 @@ class ContractModel(db.Model):
         self.modified_by = data.get('modified_by')
         self.contract_entity_purchaser_id = data.get('contract_entity_purchaser_id')
         self.contract_entity_supplier_id = data.get('contract_entity_supplier_id')
+        self.contract_type_id = data.get('contract_type_id')
 
     def save(self):
         db.session.add(self)
@@ -73,8 +77,10 @@ class ContractSchema(Schema):
     modified_by  =  fields.Int(dump_only=True)
     contract_entity_purchaser_id  =  fields.Int(dump_only=True)
     contract_entity_supplier_id  =  fields.Int(dump_only=True)
+    contract_type_id  =  fields.Int(dump_only=True)
     contract_entity_purchaser = fields.Nested(ContractEntitySchema)
     contract_entity_supplier = fields.Nested(ContractEntitySchema)
     contract_products = fields.Nested(ContractProductSchema, many=True)
+    contract_type = fields.Nested(ContractTypeSchema)
 
     

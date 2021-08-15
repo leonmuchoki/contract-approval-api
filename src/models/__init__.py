@@ -12,3 +12,8 @@ from .ContractTypeModel import ContractTypeModel, ContractTypeSchema
 from .ProductModel import ProductModel, ProductModelSchema
 from .RoleModel import RoleModel, RoleSchema
 from .TenderModel import TenderModel, TenderModelSchema
+from .ClauseModel import ClauseModel, ClauseSchema
+from .ClauseDetailsModel import ClauseDetailsModel, ClauseDetailsSchema
+from .ClauseSubDetailsModel import ClauseSubDetailsModel, ClauseSubDetailsSchema
+from .ClausePartModel import ClausePartModel, ClausePartSchema
+

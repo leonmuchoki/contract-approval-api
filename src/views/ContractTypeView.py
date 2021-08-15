@@ -13,10 +13,8 @@ def create():
 	Create Contract Type Function
 	"""
 	req_data = request.get_json()
-	data, error = contract_type_schema.load(req_data)
-	if error:
-		return custom_response(error, 400)
-	contract_type = ContractTypeModel(data)
+
+	contract_type = ContractTypeModel(req_data)
 	contract_type.save()
 	data = contract_type_schema.dump(contract_type)
 	return custom_response(data, 201)

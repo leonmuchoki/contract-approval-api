@@ -1,22 +1,22 @@
 from . import db
 import datetime
 from marshmallow import fields, Schema
+from .ContractClauseDetailsModel import ContractClauseDetailsSchema
 
 class ContractClauseModel(db.Model):
     __tablename__ = 'contract_clauses'
 
     id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    clause_details = db.Column(db.String(800))
-    department_id = db.Column(db.Integer)
+    contract_id = db.Column(db.Integer, db.ForeignKey('contracts.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     modified_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     modified_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    contract_clause_details = db.relationship('ContractClauseDetailModel', backref='contract_clauses', lazy=True)
 
     def __init__(self,data):
         self.id = data.get('id')
-        self.clause_details = data.get('clause_details')
-        self.department_id = data.get('department_id')
+        self.contract_id = data.get('contract_id')
         self.created_at = data.get('created_at')
         self.created_by = data.get('created_by')
         self.modified_at = data.get('modified_at')
@@ -52,9 +52,9 @@ class ContractClauseSchema(Schema):
     ContractClause Schema
     """
     id = fields.Int(dump_only=True)
-    clause_details = fields.Str(required=True)
-    department_id = fields.Int(required=True)
+    contract_id = fields.Int(required=True)
     created_at = fields.DateTime(dump_only=True)
     created_by = fields.Int(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
     modified_by  =  fields.Int(dump_only=True)
+    contract_clause_details = fields.Nested(ContractClauseDetailsSchema, many=True)

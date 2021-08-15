@@ -1,9 +1,11 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.ContractModel import ContractModel, ContractSchema
+from ..models.ContractClauseModel import ContractClauseModel, ContractClauseSchema
 
 contract_api = Blueprint('contract_api', __name__)
 contract_schema = ContractSchema()
+contract_clause_schema = ContractClauseSchema()
 
 
 @contract_api.route('/', methods=['POST'])
@@ -22,8 +24,16 @@ def create():
 	#	return custom_response(error, 400)
 	contract = ContractModel(req_data)
 	contract.save()
-	data = contract_schema.dump(contract)
-	return custom_response(data, 201)
+	contract_data = contract_schema.dump(contract)
+
+	#create/initiate contract clause with created contract id
+	# clause_data = {}
+	# clause_data['created_by'] = g.user.get('id')
+	# clause_data['contract_id'] = contract_data.get('id')
+	# clause = ContractClauseModel(clause_data)
+	# clause.save()
+
+	return custom_response(contract_data, 201)
 
 
 @contract_api.route('/', methods=['GET'])
