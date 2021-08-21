@@ -22,6 +22,7 @@ def create():
 
 
 @contract_clause_api.route('/', methods=['GET'])
+@Auth.auth_required
 def get_all():
 	"""
 	Get All Contract Clauses
@@ -32,14 +33,15 @@ def get_all():
 
 
 @contract_clause_api.route('/<int:contract_clause_id>', methods=['GET'])
+@Auth.auth_required
 def get_one(contract_clause_id):
 	"""
 	Get A Contract Clause
 	"""
-	post = ContractClauseModel.get_one_contract_clause(contract_clause_id)
-	if not post:
-		return custom_response({'error': 'post not found'}, 404)
-	data = contract_clause_schema.dump(post).data
+	contract_clause = ContractClauseModel.get_one_contract_clause(contract_clause_id)
+	if not contract_clause:
+		return custom_response({'error': 'contract clause not found'}, 404)
+	data = contract_clause_schema.dump(contract_clause)
 	return custom_response(data, 200)
 
 

@@ -8,6 +8,8 @@ class ContractClauseModel(db.Model):
 
     id = db.Column(db.Integer,primary_key=True, autoincrement=True)
     contract_id = db.Column(db.Integer, db.ForeignKey('contracts.id'), nullable=False)
+    clause_title = db.Column(db.String(400))
+    clause_body = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     modified_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -17,6 +19,8 @@ class ContractClauseModel(db.Model):
     def __init__(self,data):
         self.id = data.get('id')
         self.contract_id = data.get('contract_id')
+        self.clause_title = data.get('clause_title')
+        self.clause_body = data.get('clause_body')
         self.created_at = data.get('created_at')
         self.created_by = data.get('created_by')
         self.modified_at = data.get('modified_at')
@@ -53,6 +57,8 @@ class ContractClauseSchema(Schema):
     """
     id = fields.Int(dump_only=True)
     contract_id = fields.Int(required=True)
+    clause_title = fields.Str(required=True)
+    clause_body = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     created_by = fields.Int(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)

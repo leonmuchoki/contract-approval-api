@@ -42,7 +42,7 @@ def create_app():
 
 	app.register_blueprint(user_blueprint, url_prefix='/api/v1/users')
 	app.register_blueprint(role_blueprint, url_prefix='/api/v1/roles')
-	app.register_blueprint(contract_clause_blueprint, url_prefix='/api/v1/contractclauses')
+	app.register_blueprint(contract_clause_blueprint, url_prefix='/api/v1/contract/clauses')
 	app.register_blueprint(contract_clause_details_blueprint, url_prefix='/api/v1/contractclausedetails')
 	app.register_blueprint(contract_detail_blueprint, url_prefix='/api/v1/contractdetails')
 	app.register_blueprint(contract_type_blueprint, url_prefix='/api/v1/contract/types')
