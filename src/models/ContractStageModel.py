@@ -1,29 +1,20 @@
 from . import db
 import datetime
-from marshmallow import fields, Schema
-from .ClauseSubDetailsModel import ClauseSubDetailsSchema
+from marshmallow import fields, Schema, INCLUDE
 
-class ClauseDetailsModel(db.Model):
-    __tablename__ = 'clause_details'
+class ContractStageModel(db.Model):
+    __tablename__ = 'contract_stages'
 
     id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    clause_id = db.Column(db.Integer, db.ForeignKey('clauses.id'), nullable=False)
-    clause_part_id = db.Column(db.Integer, db.ForeignKey('clause_parts.id'), nullable=False)
-    clause_detail = db.Column(db.String(500))
-    has_table = db.Column(db.Boolean)
+    contract_stage = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     modified_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     modified_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    clause_sub_details = db.relationship('ClauseSubDetailsModel', backref='clause_details', lazy=True)
-
     def __init__(self,data):
         self.id = data.get('id')
-        self.clause_id = data.get('clause_id')
-        self.clause_part_id = data.get('clause_part_id')
-        self.clause_detail = data.get('clause_detail')
-        self.has_table = data.get('has_table')
+        self.contract_stage = data.get('contract_stage')
         self.created_at = data.get('created_at')
         self.created_by = data.get('created_by')
         self.modified_at = data.get('modified_at')
@@ -44,27 +35,28 @@ class ClauseDetailsModel(db.Model):
         db.session.commit()
 
     @staticmethod
-    def get_all_clause_details():
-        return ClauseDetailsModel.query.all()
+    def get_all_contract_stages():
+        return ContractStageModel.query.all()
 
     @staticmethod
-    def get_one_clause_detail(id):
-        return ClauseDetailsModel.query.get(id)
+    def get_one_contract_stage(id):
+        return ContractStageModel.query.get(id)
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
-class ClauseDetailsSchema(Schema):
+class ContractStageSchema(Schema):
     """
-    Clause Details Schema
+    Contract stage Schema
     """
+    class Meta:
+        unknown = INCLUDE
+
     id = fields.Int(dump_only=True)
-    clause_id = fields.Int(required=True)
-    clause_part_id = fields.Int(required=True)
-    clause_detail = fields.Str(required=True)
-    has_table = fields.Boolean(dump_only=True)
+    contract_stage = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
     created_by = fields.Int(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
     modified_by  =  fields.Int(dump_only=True)
-    clause_sub_details = fields.Nested(ClauseSubDetailsSchema, many=True)
+
+    

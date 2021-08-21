@@ -16,6 +16,7 @@ def create():
 	"""
 	req_data = request.get_json()
 	req_data['created_by'] = g.user.get('id')
+	req_data['contract_stage_id'] = 1 # initial contract stage/procurment
 	#print('req_data')
 	#print(req_data)
 
@@ -63,24 +64,21 @@ def get_one(contract_id):
 @contract_api.route('/<int:contract_id>', methods=['PUT'])
 @Auth.auth_required
 def update(contract_id):
-    """
-    Update A Contract
-    """
-    req_data = request.get_json()
-    req_data['modified_by'] = g.user.get('id')
-    
-    contract = ContractModel.get_one_contract(contract_id)
-    if not contract:
-        return custom_response({'error': 'contract not found'}, 404)
-    data = contract_schema.dump(contract)
+	"""
+	Update A Contract
+	"""
+	#print('Update A Contract...')
+	req_data = request.get_json()
+	req_data['modified_by'] = g.user.get('id')
 
-    data, error = contract_schema.load(req_data, partial=True)
-    if error:
-        return custom_response(error, 400)
-    contract.update(data)
+	contract = ContractModel.get_one_contract(contract_id)
+	if not contract:
+		return custom_response({'error': 'contract not found'}, 404)
+	#print(req_data)
+	contract.update(req_data)
 
-    data = contract_schema.dump(contract)
-    return custom_response(data, 200)
+	data = contract_schema.dump(contract)
+	return custom_response(data, 200)
 
 
 @contract_api.route('/<int:contract_id>', methods=['DELETE'])

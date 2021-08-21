@@ -16,9 +16,13 @@
 ## db
  $ flask db migrate -m "Initial migration."
  $ flask db upgrade
+ $ py manage.py create_db
+ $ py manage.py db migrate
+ $ py manage.py db upgrade
 
 ## useful resources:
 https://github.com/madven/flask-postgres
 https://dev.to/dev0928/build-restful-apis-using-python-flask-56c7
 https://docs.sqlalchemy.org/en/14/orm/join_conditions.html
 https://jasonwatmore.com/post/2019/06/22/angular-8-jwt-authentication-example-tutorial
+https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/

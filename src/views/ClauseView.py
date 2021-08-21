@@ -1,11 +1,11 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.ClauseModel import ClauseModel, ClauseSchema
-from ..models.ClausePartModel import ClausePartModel
+from ..models.ClausePartModel import ClausePartModel, ClausePartSchema
 
 clause_api = Blueprint('clause_api', __name__)
 clause_schema = ClauseSchema()
-
+clause_parts_schema = ClausePartSchema()
 
 @clause_api.route('/', methods=['POST'])
 @Auth.auth_required
@@ -37,7 +37,9 @@ def get_clause_parts():
 	Get All Clause Parts
 	"""
 	clause_parts = ClausePartModel.get_all_clause_parts()
-	data = clause_schema.dump(clause_parts, many=True)
+	data = clause_parts_schema.dump(clause_parts, many=True)
+	print('All Clause Parts')
+	print(data)
 	return custom_response(data, 200)
 
 

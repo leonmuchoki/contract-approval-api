@@ -4,6 +4,7 @@ from marshmallow import fields, Schema, INCLUDE
 from .ContractProductModel import ContractProductSchema
 from .ContractEntityModel import ContractEntitySchema
 from .ContractTypeModel import ContractTypeSchema
+from .ContractStageModel import ContractStageSchema
 
 class ContractModel(db.Model):
     __tablename__ = 'contracts'
@@ -18,9 +19,11 @@ class ContractModel(db.Model):
     contract_entity_purchaser_id = db.Column(db.Integer, db.ForeignKey('contract_entities.id'), nullable=False)
     contract_entity_supplier_id = db.Column(db.Integer, db.ForeignKey('contract_entities.id'), nullable=False)
     contract_type_id =  db.Column(db.Integer, db.ForeignKey('contract_types.id'))
+    contract_stage_id =  db.Column(db.Integer, db.ForeignKey('contract_stages.id'))
 
     contract_products = db.relationship('ContractProductModel', backref='contracts', lazy=True)
     contract_type = db.relationship('ContractTypeModel', backref='contracts', lazy=True)
+    contract_stage = db.relationship('ContractStageModel', backref='contracts', lazy=True)
     contract_entity_purchaser = db.relationship("ContractEntityModel", foreign_keys=[contract_entity_purchaser_id])
     contract_entity_supplier = db.relationship("ContractEntityModel", foreign_keys=[contract_entity_supplier_id])
 
@@ -78,9 +81,11 @@ class ContractSchema(Schema):
     contract_entity_purchaser_id  =  fields.Int(dump_only=True)
     contract_entity_supplier_id  =  fields.Int(dump_only=True)
     contract_type_id  =  fields.Int(dump_only=True)
+    contract_stage_id  =  fields.Int(dump_only=True)
     contract_entity_purchaser = fields.Nested(ContractEntitySchema)
     contract_entity_supplier = fields.Nested(ContractEntitySchema)
     contract_products = fields.Nested(ContractProductSchema, many=True)
     contract_type = fields.Nested(ContractTypeSchema)
+    contract_stage = fields.Nested(ContractStageSchema)
 
     
