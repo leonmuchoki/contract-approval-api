@@ -47,6 +47,10 @@ class ContractClauseModel(db.Model):
     @staticmethod
     def get_one_contract_clause(id):
         return ContractClauseModel.query.get(id)
+    
+    @staticmethod
+    def get_contract_clauses(contract_id):
+        return ContractClauseModel.query.filter(ContractClauseModel.contract_id == contract_id).first()
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
