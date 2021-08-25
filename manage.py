@@ -1,7 +1,7 @@
 import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from src.models import RoleModel, ProductModel, ContractEntityModel
+from src.models import RoleModel, ProductModel, ContractEntityModel, ContractStatusModel
 from src.app import create_app, db
 
 
@@ -34,6 +34,14 @@ def seed():
     db.session.add(roleCEO)
     db.session.add(roleSupplier)
     db.session.add(roleAdmin)
+
+    initiateContract = ContractStatusModel(status = 'initiated')
+    approveContract = ContractStatusModel(status = 'approved')
+    rejectContract = ContractStatusModel(status = 'rejected')
+
+    db.session.add(initiateContract)
+    db.session.add(approveContract)
+    db.session.add(rejectContract)
 
     kemsaEntity = ContractEntityModel(entity_name='Kenya Medical Supplies Authority')
     umasaEntity = ContractEntityModel(entity_name='Umasa Services and Solutions Ltd')

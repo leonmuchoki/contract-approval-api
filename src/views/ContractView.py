@@ -1,3 +1,4 @@
+import re
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.ContractModel import ContractModel, ContractSchema
@@ -16,7 +17,6 @@ def create():
 	"""
 	req_data = request.get_json()
 	req_data['created_by'] = g.user.get('id')
-	req_data['contract_stage_id'] = 1 # initial contract stage/procurment
 	#print('req_data')
 	#print(req_data)
 
@@ -74,6 +74,13 @@ def update(contract_id):
 	contract = ContractModel.get_one_contract(contract_id)
 	if not contract:
 		return custom_response({'error': 'contract not found'}, 404)
+	
+	#check if approved or rejected
+	contract_status = req_data.get('contract_status_id')
+	if contract_status == 2: #approved
+		req_data['contract_stage_id'] = 4 
+	elif contract_status == 3: #rejected..move back to procurement
+		req_data['contract_stage_id'] = 1 
 	#print(req_data)
 	contract.update(req_data)
 
