@@ -37,6 +37,8 @@ class ContractModel(db.Model):
         self.contract_no = data.get('contract_no')
         self.title = data.get('title')
         self.status_comments = data.get('status_comments')
+        self.contract_stage_id = data.get('contract_stage_id')
+        self.contract_status_id = data.get('contract_status_id')
         self.created_at = data.get('created_at')
         self.created_by = data.get('created_by')
         self.modified_at = data.get('modified_at')
