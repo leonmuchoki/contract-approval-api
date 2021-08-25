@@ -24,7 +24,7 @@ class Production(object):
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) #os.getenv('DATABASE_URL')
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
 
